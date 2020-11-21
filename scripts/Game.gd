@@ -1,6 +1,3 @@
-# TODO: end game state (who won, winning animation, play again?)
-# TODO (low priority): achievement
-
 extends Node
 
 onready var o_texture = preload("res://new_assets/o.png")
@@ -216,5 +213,3 @@ func restart():
 	board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 	$Menu/Draw.hide()
 	$Menu/Score.hide()
-
-# ref, may need in the future: https://godotengine.org/qa/15160/how-to-make-part-of-script-always-repeat-in-loop-after-seconds
