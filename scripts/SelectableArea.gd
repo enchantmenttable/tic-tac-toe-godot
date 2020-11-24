@@ -25,4 +25,5 @@ func _on_POS_input_event(viewport, event, shape_idx):
 			spr_selected = true
 			$Hover.hide()
 			$x_o.set_texture(x)
+			game.comp_turn = true
 			game.update()

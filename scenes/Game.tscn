@@ -118,7 +118,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Mask2" type="ColorRect" parent="Menu/Draw"]
+[node name="Mask" type="ColorRect" parent="Menu/Draw"]
 margin_right = 800.0
 margin_bottom = 800.0
 color = Color( 0, 0, 0, 0.501961 )

@@ -15,7 +15,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Tic Tac Toe"
+config/name="Tic Tac Toe Plus"
 run/main_scene="res://scenes/Game.tscn"
 config/icon="res://icon.png"
 
@@ -23,6 +23,7 @@ config/icon="res://icon.png"
 
 window/size/width=800
 window/size/height=800
+window/name="Tic Tac Toe"
 
 [rendering]
 

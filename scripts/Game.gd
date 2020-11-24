@@ -4,6 +4,8 @@ onready var o_texture = preload("res://new_assets/o.png")
 
 var human_score = 0
 var comp_score = 0
+var win_line = []
+var comp_turn = false
 
 
 func _ready():
@@ -37,11 +39,20 @@ func update_board_array():
 				board[move[0]][move[1]] = HUMAN
 
 
-func update_board_render(x, y):
+func update_grid_render(x, y, player):
+	var select_option
+	var texture
+	match player:
+		COMP:
+			select_option = true
+			texture = o_texture
+		0:
+			select_option = false
+			texture = null
 	for i in range(1, 10):
 		if moves[i] == [x, y]:
-			get_node("Grid/POS" + str(i) + "/x_o").set_texture(o_texture)
-			get_node("Grid/POS" + str(i)).spr_selected = true
+			get_node("Grid/POS" + str(i) + "/x_o").set_texture(texture)
+			get_node("Grid/POS" + str(i)).spr_selected = select_option
 
 
 func wins(state, player):
@@ -55,7 +66,18 @@ func wins(state, player):
 		[state[0][2], state[1][1], state[2][0]],
 		[state[2][2], state[1][1], state[0][0]]
 	]
+	var win_line_indices = [
+		[[0, 0], [0, 1], [0, 2]],
+		[[1, 0], [1, 1], [1, 2]],
+		[[2, 0], [2, 1], [2, 2]],
+		[[0, 0], [1, 0], [2, 0]],
+		[[0, 1], [1, 1], [2, 1]],
+		[[0, 2], [1, 2], [2, 2]],
+		[[0, 2], [1, 1], [2, 0]],
+		[[2, 2], [1, 1], [0, 0]]
+	]
 	if [player, player, player] in win_states:
+		win_line = win_line_indices[win_states.find([player, player, player])]
 		return true
 	else:
 		return false
@@ -170,7 +192,8 @@ func ai_turn():
 		y = move[1]
 
 	set_move(x, y, COMP)
-	update_board_render(x, y)
+	update_grid_render(x, y, COMP)
+	comp_turn = false
 
 
 func score_board(player):
@@ -183,33 +206,41 @@ func score_board(player):
 	$Menu/Score.show()
 
 
-func draw_msg():
-	$Menu/Draw.show()
-
-
 func update():
 	update_board_array()
-	ai_turn()
-	print(len(empty_cells(board)))
+	if comp_turn:
+		ai_turn()
 	if wins(board, HUMAN):
 		score_board(HUMAN)
 		yield(get_tree().create_timer(1.5), "timeout")
-		restart()
+		clear_line(win_line)
+
 	elif wins(board, COMP):
 		score_board(COMP)
 		yield(get_tree().create_timer(1.5), "timeout")
-		restart()
+		clear_line(win_line)
+
 	elif len(empty_cells(board)) == 0:
-		draw_msg()
+		$Menu/Draw.show()
 		yield(get_tree().create_timer(1.5), "timeout")
-		restart()
+		clear_all()
 
-
-func restart():
-	var poses = $Grid.get_children()
-	for pos in poses:
-		pos.get_node("x_o").texture = null
-		pos.spr_selected = false
-	board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 	$Menu/Draw.hide()
 	$Menu/Score.hide()
+
+	if comp_turn:
+		yield(get_tree().create_timer(0.5), "timeout")
+		ai_turn()
+
+
+func clear_all():
+	for x in range(3):
+		for y in range(3):
+			board[x][y] = 0
+			update_grid_render(x, y, 0)
+
+
+func clear_line(line):
+	for coordinate in line:
+		board[coordinate[0]][coordinate[1]] = 0
+		update_grid_render(coordinate[0], coordinate[1], 0)
