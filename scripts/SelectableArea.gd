@@ -21,7 +21,7 @@ func _on_POS_mouse_exited():
 
 func _on_POS_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == BUTTON_LEFT:
+		if event.button_index == BUTTON_LEFT and $x_o.texture == null:
 			spr_selected = true
 			$Hover.hide()
 			$x_o.set_texture(x)

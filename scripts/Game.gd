@@ -209,6 +209,7 @@ func score_board(player):
 func update():
 	update_board_array()
 	if comp_turn:
+		yield(get_tree().create_timer(0.3), "timeout")
 		ai_turn()
 	if wins(board, HUMAN):
 		score_board(HUMAN)
@@ -229,7 +230,7 @@ func update():
 	$Menu/Score.hide()
 
 	if comp_turn:
-		yield(get_tree().create_timer(0.5), "timeout")
+		yield(get_tree().create_timer(0.3), "timeout")
 		ai_turn()
 
 
