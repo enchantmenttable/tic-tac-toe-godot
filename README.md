@@ -1,5 +1,3 @@
-### A tic-tac-toe game implementation using Godot engine
-
 After losing/winning, you can continue playing with existing pieces.
 
 
